@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+        integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+        crossorigin="anonymous" />
+    <title>Catálogo de productos</title>
+
+</head>
+
+<body>
+    <div class="row bg-dark">
+        <div class="col-md-1"></div>
+        <div class="col-md-5">
+            <select class="form-select" aria-label="Selecciona un género" id="producttype" form="productfilter" name="producttype">
+                <option selected disabled>Selecciona un género</option>
+                <!-- TODO: Tomar generos de tabla de generos -->>
+            </select>
+            <select class="form-select" aria-label="Selecciona un género" id="section" form="productfilter" name="section">
+                <option selected disabled>Selecciona una sección</option>
+                <!-- TODO: Tomar sección de tabla de secciones -->>
+            </select>
+            <select class="form-select" aria-label="Selecciona un género" id="manufacturer" form="productfilter" name="manufacturer">
+                <option selected disabled>Selecciona un fabricante</option>
+                <!-- TODO: Tomar fabricantes de tabla de fabricantes -->>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <form action="/products/" method="GET" id="productfilter">
+                <button type="submit" class="btn btn-primary">Filtrar</button>
+            </form>
+        </div>
+    </div>
+    <div class="row bg-dark">
+        <br>
+    </div>
+
+
+    <div class="container text-center">
+        {% for trio in trios_productos %}
+        <div class="row">
+            {% for producto in trio %}
+            <div class="col-12 col-md-4 text-center">
+                <div class="card" style="max-height: fit-content; max-width: fit-content;">
+                    <img src={{producto.imagen}} class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a href="/products/{{producto.id}}">
+                                {{producto.nombre}}
+                            </a>
+                        </h5>
+                        <p class="card-text">{{producto.precio}}€</p>
+                        <a href="#" class="btn btn-primary">+ <i class="fas fa-shopping-basket"></i></a>
+                        <a href="#" class="btn btn-primary">Comprar</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <br>
+        <hr>
+        </hr>
+        {% endfor %}
+    </div>
+
+</body>
+
+</html>
