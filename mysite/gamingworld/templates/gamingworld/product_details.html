@@ -6,6 +6,57 @@ Catálogo de productos
 
 
 {% block body %}
-<span>Detalles de {{producto.nombre}}</span>
+<div class="container mt-5 mb-5">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-10">
+            <div class="card">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="images p-3">
+                            <div class="text-center p-5"> <img src="{{producto.imagen}}" width="100%" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="product p-4">
+                            <div class="mt-4 mb-3"> <span
+                                    class="text-uppercase text-muted brand">{{producto.fabricante.nombre}}</span>
+                                <h5 class="text-uppercase">{{producto.nombre}}</h5>
+                                <div class="price d-flex flex-row align-items-center">
+                                    <div class="ml-2"> <small class="dis-price"
+                                            style="color: green; font-weight: bold;">{{producto.precio}}€</small>
+                                            {% if producto.stock > 0 %}
+                                            <small style="color: cornflowerblue;">(Stock: {{producto.stock}})</small>
+                                            {% else %}
+                                            <small style="color: red;">(SIN STOCK)</small>
+                                            {% endif %}
+                                        </div>
+                                </div>
+                            </div>
+                            <p class="about">{{producto.descripcion}}</p>
+                            <br>
+                            <hr>
+                            </hr>
+                            <div>
+                                <strong>Género: </strong>
+                                <span>{{producto.genero.nombre}}</span>
+                            </div>
+                            <div>
+                                <strong>Sección: </strong>
+                                <span>{{producto.seccion.nombre}}</span>
+                            </div>
+                            {% if producto.stock > 0 %}
+                            <div class="cart mt-4 align-items-center">
+                                <a href="#" class="btn btn-primary">+ <i class="fas fa-shopping-basket"></i></a>
+                                <button class="btn btn-primary text-uppercase mr-2 px-4">Comprar</button>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}
