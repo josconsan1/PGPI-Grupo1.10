@@ -1,10 +1,11 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import *
+from random import sample
 
 
 def index(request):
-    return render(request, 'gamingworld/index.html')
+    return render(request, 'gamingworld/index.html', {"slider": enumerate(sample(list(Producto.objects.all()), 3))})
 
 def products(request):
     productos_todos = Producto.objects.all()
