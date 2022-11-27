@@ -1,0 +1,74 @@
+{% extends "gamingworld/base.html" %}
+
+{% block title %}
+Catálogo de product_amount.0s
+{% endblock %}
+
+
+{% block body %}
+
+{% if products_amounts|length == 0 %}
+<div class="row d-flex justify-content-center">
+    <span style="font-size: 200%; font-weight: bold; color: blue; text-align: center;">¡Tu carrito está vacío!</span>
+    <img src="../../../static/imgs/carritoVacio.png" style="width: fit-content;">
+</div>
+{% else %}
+<div class="row text-center">
+    <a href="#" class="btn btn-success">Proceder al pago</a>
+</div>
+
+
+{% endif %}
+
+{% for product_amount in products_amounts %}
+
+<div class="container mt-5 mb-5">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-10">
+            <div class="card">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="images p-3">
+                            <div class="text-center p-5"> <img src="{{product_amount.0.imagen}}" width="100%" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="product p-4">
+                            <div class="mt-4 mb-3"> <span
+                                    class="text-uppercase text-muted brand">{{product_amount.0.fabricante.nombre}}</span>
+                                <h5 class="text-uppercase">{{product_amount.0.nombre}}</h5>
+                                <div class="price d-flex flex-row align-items-center">
+                                    <div class="ml-2"> <small class="dis-price"
+                                            style="color: green; font-weight: bold;">{{product_amount.0.precio}}€</small>
+                                        {% if product_amount.0.stock > 0 %}
+                                        <small style="color: cornflowerblue;">(Stock:
+                                            {{product_amount.0.stock}})</small>
+                                        {% else %}
+                                        <small style="color: red;">(SIN STOCK)</small>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="about">{{product_amount.0.descripcion}}</p>
+                            <br>
+                            <hr>
+                            </hr>
+                            <div>
+                                <strong>Cantidad: </strong>
+                                <span>{{product_amount.1}}</span>
+                            </div>
+                            <div class="cart mt-4 align-items-center">
+                                <a href="/deleteproduct/{{product_amount.0.id}}" class="btn btn-danger">Quitar</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endfor %}
+
+{% endblock %}
