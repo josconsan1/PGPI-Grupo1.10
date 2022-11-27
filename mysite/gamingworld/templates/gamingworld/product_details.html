@@ -25,12 +25,12 @@ Catálogo de productos
                                 <div class="price d-flex flex-row align-items-center">
                                     <div class="ml-2"> <small class="dis-price"
                                             style="color: green; font-weight: bold;">{{producto.precio}}€</small>
-                                        {% if producto.stock > 0 %}
-                                        <small style="color: cornflowerblue;">(Stock: {{producto.stock}})</small>
-                                        {% else %}
-                                        <small style="color: red;">(SIN STOCK)</small>
-                                        {% endif %}
-                                    </div>
+                                            {% if producto.stock > 0 %}
+                                            <small style="color: cornflowerblue;">(Stock: {{producto.stock}})</small>
+                                            {% else %}
+                                            <small style="color: red;">(SIN STOCK)</small>
+                                            {% endif %}
+                                        </div>
                                 </div>
                             </div>
                             <p class="about">{{producto.descripcion}}</p>
@@ -47,13 +47,8 @@ Catálogo de productos
                             </div>
                             {% if producto.stock > 0 %}
                             <div class="cart mt-4 align-items-center">
-                                <form action="/addproduct/{{producto.id}}" method="GET" id="add_product">
-                                    <input type="number" min="1" max="{{producto.stock}}" id="amount" form="add_product"
-                                        name="amount" placeholder="Selecciona una cantidad:" style="width: 50%;">
-                                    <button type="submit" href="#" class="btn btn-primary">+ <i
-                                            class="fas fa-shopping-basket"></i></button>
-                                    <a href="#" class="btn btn-primary">Comprar</a>
-                                </form>
+                                <a href="#" class="btn btn-primary">+ <i class="fas fa-shopping-basket"></i></a>
+                                <button class="btn btn-primary text-uppercase mr-2 px-4">Comprar</button>
                             </div>
                             {% endif %}
                         </div>
