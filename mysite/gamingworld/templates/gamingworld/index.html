@@ -4,46 +4,37 @@
 
 <div class="container text-center">
 
-  <div class="row">
+  <div class="container">
 
-    <div class="col">
-      <div class="card" style="width: 18rem;">
-        <img src="/static/imgs/3.jpg" class="card-img-top" alt="...">
-        <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          <a href="#" class="btn btn-primary">+ <i class="fas fa-shopping-basket"></i></a>
-          <a href="#" class="btn btn-primary">Buy</a>
-        </div>
+    <div id="homeSlider" class="carousel slide" data-bs-ride="false">
+      <div class="carousel-indicators">
+        <button type="button" data-bs-target="#homeSlider" data-bs-slide-to="0" class="active" aria-current="true"
+          aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#homeSlider" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#homeSlider" data-bs-slide-to="2" aria-label="Slide 3"></button>
       </div>
-    </div>
-  
-    <div class="col">
-      <div class="card" style="width: 18rem;">
-        <img src="/static/imgs/3.jpg" class="card-img-top" alt="...">
-        <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          <a href="#" class="btn btn-primary">+ <i class="fas fa-shopping-basket"></i></a>
-          <a href="#" class="btn btn-primary">Buy</a>
+      <div class="carousel-inner">
+        {% for i,product in slider %}
+        <div class="carousel-item {% if i == 0 %}active{% endif %}">
+          <img src="{{ product.imagen }}" class="d-block w-100" alt="{{ product.name }}">
+          <div class="carousel-caption d-none d-md-block bg-dark" style="--bs-bg-opacity: .5;">
+            <h5>{{ product.nombre }}</h5>
+            <p>{{ product.descripcion }}</p>
+          </div>
         </div>
+        {% endfor %}
       </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#homeSlider" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#homeSlider" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
     </div>
-  
-    <div class="col">
-      <div class="card" style="width: 18rem;">
-        <img src="/static/imgs/3.jpg" class="card-img-top" alt="...">
-        <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          <a href="#" class="btn btn-primary">+ <i class="fas fa-shopping-basket"></i></a>
-          <a href="#" class="btn btn-primary">Buy</a>
-        </div>
-      </div>
-    </div>
-
   </div>
-  
+
 </div>
 
 {% endblock %}
