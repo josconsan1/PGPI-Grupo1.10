@@ -45,3 +45,6 @@ def detail(request, product_id):
     producto = Producto.objects.get(id__exact=product_id)
     modelmap = {'producto':producto}
     return render(request, 'gamingworld/product_details.html', modelmap)
+
+def return_policy(request):
+    return render(request, 'gamingworld/return_policy.html')
