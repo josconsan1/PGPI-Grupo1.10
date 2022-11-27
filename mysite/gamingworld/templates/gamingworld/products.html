@@ -6,7 +6,6 @@ Catálogo de productos
 
 
 {% block body %}
-
 <div class="row bg-dark">
     <div class="col-md-1"></div>
     <div class="col-md-9">
@@ -73,8 +72,8 @@ Catálogo de productos
                         <p class="card-text">{{producto.seccion.nombre}}</p>
                     -->
                     {% if producto.stock > 0 %}
-                        <a href="/products/{{producto.id}}" class="btn btn-primary">+ <i class="fas fa-shopping-basket"></i></a>
-                        <a href="#" class="btn btn-primary">Comprar</a>
+                    <a href="#" class="btn btn-primary">+ <i class="fas fa-shopping-basket"></i></a>
+                    <a href="#" class="btn btn-primary">Comprar</a>
                     {% else %}
                     <span style="background-color: red; border-radius: 5%; color: white; min-width: 200%;">SIN STOCK</span>
                     {% endif %}
