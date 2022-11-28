@@ -12,5 +12,6 @@ urlpatterns = [
     path('shipping_polite/', views.shipping_polite, name='shipping_polite'),
     path('return_policy/',views.return_policy, name='return_policy'),
     path('admin/', admin.site.urls),
-    path('privacy_policy', views.privacy_policy)
+    path('termsofservice/',views.termsofservice, name='termsofservice'),
+    path('privacy_policy/', views.privacy_policy),
 ]
