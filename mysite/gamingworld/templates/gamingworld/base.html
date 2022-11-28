@@ -24,8 +24,8 @@
         <img src="/static/imgs/3.jpg" alt="Bootstrap" width="70" height="65">
       </a>
       <div class="navbar-collapse collapse" id="navbar6">
-        <form class="mx-2 my-auto d-inline w-100">
-          <input type="text" class="form-control border border-right-0" placeholder="Search...">
+        <form action="/products" class="mx-2 my-auto d-inline w-100">
+          <input type="text" class="form-control border border-right-0" id="name" name="name" placeholder="Search...">
         </form>
         <ul class="navbar-nav">
           <li class="nav-item p-2">
@@ -34,7 +34,7 @@
             </a>
           </li>
           <li class="nav-item p-2">
-            <a href="#" class="btn btn-light">
+            <a href="/cart" class="btn btn-light">
               <i class="fas fa-shopping-basket"></i>
             </a>
           </li>
@@ -50,7 +50,7 @@
   {% endif %}
   {% if message is not none %}
   <div class="alert alert-primary alert-dismissible" role="alert">
-    <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     {{message}}
   </div>
   {% endif %}

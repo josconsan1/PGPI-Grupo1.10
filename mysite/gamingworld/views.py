@@ -21,7 +21,7 @@ def products(request):
     seccion_buscada = request.GET.get("section")
     fabricante_buscado = request.GET.get("manufacturer")
 
-    lista_tuplas_productos = get_products_by_tuples(genero_buscado, seccion_buscada, fabricante_buscado)
+    lista_tuplas_productos = get_products_by_tuples(nombre_de_producto_buscado, genero_buscado, seccion_buscada, fabricante_buscado)
     modelmap = {'trios_productos':lista_tuplas_productos, 
                 'generos':generos,
                 'secciones':secciones,
@@ -87,7 +87,7 @@ def get_products_from_cookies(request):
     return productos_amounts
 
 
-def get_products_by_tuples(genero_buscado=None, seccion_buscada=None, fabricante_buscado=None):
+def get_products_by_tuples(nombre_de_producto_buscado=None, genero_buscado=None, seccion_buscada=None, fabricante_buscado=None):
     productos = []
     productos_todos = Producto.objects.all()
     for producto in productos_todos:
