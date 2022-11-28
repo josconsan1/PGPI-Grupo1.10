@@ -24,7 +24,7 @@
         <img src="/static/imgs/3.jpg" alt="Bootstrap" width="70" height="65">
       </a>
       <div class="navbar-collapse collapse" id="navbar6">
-        <form class="mx-2 my-auto d-inline w-100">
+        <form action="/products" class="mx-2 my-auto d-inline w-100">
           <input type="text" class="form-control border border-right-0" id="name" name="name" placeholder="Search...">
         </form>
         <ul class="navbar-nav">
@@ -34,7 +34,7 @@
             </a>
           </li>
           <li class="nav-item p-2">
-            <a href="#" class="btn btn-light">
+            <a href="/cart" class="btn btn-light">
               <i class="fas fa-shopping-basket"></i>
             </a>
           </li>
@@ -42,7 +42,19 @@
       </div>
     </div>
   </nav>
-
+  {% if error_message is not none %}
+  <div class="alert alert-danger alert-dismissible" role="alert">
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    {{error_message}}
+  </div>
+  {% endif %}
+  {% if message is not none %}
+  <div class="alert alert-primary alert-dismissible" role="alert">
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    {{message}}
+  </div>
+  {% endif %}
+  
   {% block body %}
   Example body
   {% endblock %}
@@ -54,6 +66,7 @@
         <div class="container text-center text-md-start mt-5">
           <div class="row mt-3">
             <div class="col-md-4 col-lg-2 col-xl-2 mx-auto mb-4">
+
               <h6 class="text-uppercase fw-bold">Compañia</h6>
               <hr class="mb-4 mt-0 d-inline-block mx-auto"
                 style="width: 70px; background-color: #7c4dff; height: 2px" />
@@ -72,7 +85,9 @@
               </p>
             </div>
             <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+
               <h6 class="text-uppercase fw-bold">Contacto de la empresa</h6>
+
               <hr class="mb-4 mt-0 d-inline-block mx-auto"
                 style="width: 60px; background-color: #7c4dff; height: 2px" />
               <p><i class="fas fa-envelope mr-3"></i> info@gamingworld.com</p>
