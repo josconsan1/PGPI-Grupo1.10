@@ -57,3 +57,6 @@ def shipping_polite(request):
 
 def return_policy(request):
     return render(request, 'gamingworld/return_policy.html')
+
+def privacy_policy(request):
+    return render(request, 'gamingworld/privacy_policy.html')
