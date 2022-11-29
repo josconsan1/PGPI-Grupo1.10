@@ -73,8 +73,17 @@ Catálogo de productos
                         <p class="card-text">{{producto.seccion.nombre}}</p>
                     -->
                     {% if producto.stock > 0 %}
+                    <form action="/addproduct/{{producto.id}}" method="GET" id="add_product">
+                        <input type="number" min="1" max="{{producto.stock}}" id="amount"
+                            name="amount" placeholder="Selecciona una cantidad:" style="width: 50%;">
+                        <button type="submit" href="#" class="btn btn-primary">+ <i
+                                class="fas fa-shopping-basket"></i></button>
+                        <a href="#" class="btn btn-primary">Comprar</a>
+                    </form>
+                        <!--
                         <a href="/products/{{producto.id}}" class="btn btn-primary">+ <i class="fas fa-shopping-basket"></i></a>
                         <a href="#" class="btn btn-primary">Comprar</a>
+                        -->
                     {% else %}
                     <span style="background-color: red; border-radius: 5%; color: white; min-width: 200%;">SIN STOCK</span>
                     {% endif %}
