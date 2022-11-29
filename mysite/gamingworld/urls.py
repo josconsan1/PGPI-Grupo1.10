@@ -12,5 +12,7 @@ urlpatterns = [
     path('shipping_polite/', views.shipping_polite, name='shipping_polite'),
     path('return_policy/',views.return_policy, name='return_policy'),
     path('admin/', admin.site.urls),
-    path('privacy_policy', views.privacy_policy)
+    path('privacy_policy/', views.privacy_policy),
+    path('orders/', views.get_order_by_id),
+    path('order_not_found/', views.order_not_found)
 ]

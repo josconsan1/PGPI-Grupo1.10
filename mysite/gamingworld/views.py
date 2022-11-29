@@ -126,3 +126,28 @@ def return_policy(request):
 
 def privacy_policy(request):
     return render(request, 'gamingworld/privacy_policy.html')
+
+def get_order_by_id(request):
+    res = None
+    order_id_buscado = request.GET.get('order_id')
+    orders = Pedido.objects.all()
+    for order in orders:
+        pedido_id = order.order_id
+        if pedido_id==int(order_id_buscado):
+            res = order
+    if res==None:
+        return render(request, 'gamingworld/order_not_found.html')
+    else:
+        modelmap = {'producto':res.producto.nombre, 
+                        'status':res.status.nombre,
+                        'direccion':res.direccion,
+                        'telefono':res.telefono,
+                        'nombre':res.nombre,
+                        'apellido':res.apellido,
+                        'correo':res.correo,
+                        'tarjeta':res.tarjeta,
+                        'order_id':res.order_id}
+        return render(request, 'gamingworld/follow_order.html', modelmap)
+
+def order_not_found(request):
+    return render(request, 'gamingworld/order_not_found.html')

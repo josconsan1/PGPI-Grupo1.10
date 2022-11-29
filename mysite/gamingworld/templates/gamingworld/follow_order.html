@@ -1,0 +1,44 @@
+{% extends "gamingworld/base.html" %}
+
+{% block title %}
+Seguimiento de pedido
+{% endblock %}
+
+{% block body %}
+<div class="container text-center">
+    <div class="row">
+        <div class="col-md-12 rosa">
+            <hr class="mb-4 mt-0 d-inline-block mx-auto" style="width: 60px; background-color: #7c4dff; height: 2px" />
+            <h4>Id de Pedido: {{order_id}}</h4>
+            <div>
+                <strong>Estado del pedido: </strong>
+                <span>{{status}}</span>
+            </div>
+            <div>
+                <strong>Producto: </strong>
+                <span>{{producto}}</span>
+            </div>
+            <div>
+                <strong>Nombre del destinatario: </strong>
+                <span>{{nombre}}</span>
+            </div>
+            <div>
+                <strong>Apellidos del destinatario: </strong>
+                <span>{{apellido}}</span>
+            </div>
+            <div>
+                <strong>Dirección de envío: </strong>
+                <span>{{direccion}}</span>
+            </div>
+            <div>
+                <strong>Correo del destinatario: </strong>
+                <span>{{correo}}</span>
+            </div>
+            <div>
+                <strong>Telefono del destinatario: </strong>
+                <span>{{telefono}}</span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock%}
