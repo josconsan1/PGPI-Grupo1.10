@@ -1,0 +1,75 @@
+{% extends "gamingworld/base.html" %}
+
+{% block head %}
+<script src="https://js.stripe.com/v3/"></script>
+{% endblock %}
+
+{% block title %}
+Pasarela de pago
+{% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <form id="payment-form">
+        <div class="mb-3">
+            <label for="exampleFormControlInput1" class="form-label">Direccion a la que recibir el recibo</label>
+            <input type="email" class="form-control" id="receipt_email" placeholder="pepito@gamingworld.com"
+                aria-label="email" required />
+        </div>
+        <span>Cantidad total: {{ total_amount }} EUR</span>
+        <div class="container m-3" id="payment-element"></div>
+        <button class="btn btn-primary" id="submit">
+            <div class="spinner hidden" id="spinner"></div>
+            <span id="button-text">Pagar ahora</span>
+        </button>
+    </form>
+</div>
+
+<script defer>
+    const stripe = Stripe("pk_test_51M9cKhHdW2vD7v649sedRFD7UUkSFIPj6MSjltJLDGy9Zib76eZrU4hB55qs709RvuWraLRojDxoNuC3EuhEDC6f00KhnXDZXf")
+
+    let elements;
+
+    initialize();
+
+    document
+        .querySelector("#payment-form")
+        .addEventListener("submit", handleSubmit);
+
+    function initialize() {
+        let appereance = {
+            theme: 'stripe',
+        };
+        elements = stripe.elements({
+            appereance: appereance,
+            clientSecret: '{{ clientSecret }}'
+        });
+        let paymentElement = elements.create("payment", {
+            layout: "tabs",
+        })
+        paymentElement.mount("#payment-element")
+    }
+
+    async function handleSubmit(e) {
+        e.preventDefault();
+
+        const { error } = await stripe.confirmPayment({
+            elements,
+            "confirmParams": {
+                return_url: "http://localhost:8000/succeed",
+                receipt_email: document.getElementById("receipt_email").value,
+            },
+        });
+
+        if (error.type === "card_error" || error.type === "validation_error") {
+            console.log(error.message);
+        } else {
+            console.log("An unexpected error occurred.");
+        }
+
+    }
+
+</script>
+
+{% endblock %}

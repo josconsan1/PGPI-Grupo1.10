@@ -14,4 +14,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('termsofservice/',views.termsofservice, name='termsofservice'),
     path('privacy_policy/', views.privacy_policy),
+    path('checkout/', views.checkout_page, name='checkout'),
+    path('succeed/', views.checkout_suceed, name='succeed')
 ]
