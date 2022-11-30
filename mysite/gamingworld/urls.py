@@ -14,5 +14,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('privacy_policy/', views.privacy_policy),
     path('orders/', views.get_order_by_id),
-    path('order_not_found/', views.order_not_found)
+    path('order_not_found/', views.order_not_found),
+    path('termsofservice/',views.termsofservice, name='termsofservice'),
 ]
