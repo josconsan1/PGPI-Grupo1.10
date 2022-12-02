@@ -129,3 +129,42 @@ def return_policy(request):
 
 def privacy_policy(request):
     return render(request, 'gamingworld/privacy_policy.html')
+
+
+def get_cart_price(request):
+    productos_amounts = []
+    precio_total = 0
+    cookies = request.COOKIES
+    for cookie in cookies.keys():
+        if cookie[0:-1] == "product_id_":
+            producto = Producto.objects.get(id__exact=cookie[-1])
+            precio_total += float(producto.precio) * float(cookies[cookie])
+            
+    
+    return precio_total
+
+    
+def release(request):
+     productos_price = get_cart_price(request)
+     precio_total = get_cart_price(request)
+
+     nombre = request.GET.get("nombre_")
+     apellidos = request.GET.get("apellidos_")
+     identificacion = request.GET.get("identificacion_")
+     movil = request.GET.get("movil_")
+     direccion= request.GET.get("direccion_")
+     piso = request.GET.get("piso_")
+     observaciones = request.GET.get("observaciones_")
+     pais = request.GET.get("pais_")
+     codigo_postal = request.GET.get("codigo_postal_")
+     poblacion = request.GET.get("poblacion_")
+     provincia = request.GET.get("provincia_")
+     
+
+     
+     release_price = float(1.99)
+     total_price = release_price + productos_price
+     
+     modelmap = {"products_price" : productos_price, "precio_envio" : release_price, "precio_total" : total_price }
+    
+     return render(request, 'gamingworld/release.html', modelmap)    

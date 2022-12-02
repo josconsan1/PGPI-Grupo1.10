@@ -14,4 +14,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('termsofservice/',views.termsofservice, name='termsofservice'),
     path('privacy_policy/', views.privacy_policy),
+    path('products/payment/release', views.release, name='release'),
 ]
