@@ -1,20 +1,23 @@
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from .models import *
 from datetime import *
 from random import sample
-from mysite.settings import STRIPE_KEY
 
 import stripe
+from django.core.mail import send_mail
+from django.http import HttpResponse
+from django.shortcuts import redirect, render
+
+from mysite.settings import STRIPE_KEY
+
+from .models import *
 
 stripe.api_key = STRIPE_KEY
 
 
 
 def checkout_page(request):
-    total_amount = 0
+    total_amount = 1.99 # Gastos de envio
     for p, a in get_products_from_cookies(request):
-        total_amount += p.precio * int(a)
+        total_amount += float(p.precio) * int(a)
     intent = stripe.PaymentIntent.create(
         amount=int(total_amount * 100),
         currency='eur',
@@ -22,7 +25,7 @@ def checkout_page(request):
             'enabled': True,
         }
     )
-    return render(request, 'gamingworld/checkout_page.html', {'clientSecret': intent['client_secret'], 'total_amount': total_amount})
+    return render(request, 'gamingworld/checkout.html', {'clientSecret': intent['client_secret'], 'total_amount': total_amount})
 
 def checkout_suceed(request):
     payment_intent = request.GET.get('payment_intent', None)
@@ -31,6 +34,13 @@ def checkout_suceed(request):
     if payment_intent:
         paymentIntent = stripe.PaymentIntent.retrieve(payment_intent)
         if paymentIntent['status'] == 'succeeded':
+            send_mail(
+                'Recibo de pago GamingWorld',
+                'Gracias por comprar en nuestra tienda. Tu identificador de pedido es %s' % (payment_intent),
+                'josconsan1@alum.us.es',
+                [paymentIntent['receipt_email']],
+                fail_silently=True,
+            )
             status = 'Completado'
         elif paymentIntent['status'] == 'processing':
             status = 'Procesando el pago'
@@ -168,3 +178,42 @@ def return_policy(request):
 
 def privacy_policy(request):
     return render(request, 'gamingworld/privacy_policy.html')
+
+
+def get_cart_price(request):
+    productos_amounts = []
+    precio_total = 0
+    cookies = request.COOKIES
+    for cookie in cookies.keys():
+        if cookie[0:-1] == "product_id_":
+            producto = Producto.objects.get(id__exact=cookie[-1])
+            precio_total += float(producto.precio) * float(cookies[cookie])
+            
+    
+    return precio_total
+
+    
+def release(request):
+     productos_price = get_cart_price(request)
+     precio_total = get_cart_price(request)
+
+     nombre = request.GET.get("nombre_")
+     apellidos = request.GET.get("apellidos_")
+     identificacion = request.GET.get("identificacion_")
+     movil = request.GET.get("movil_")
+     direccion= request.GET.get("direccion_")
+     piso = request.GET.get("piso_")
+     observaciones = request.GET.get("observaciones_")
+     pais = request.GET.get("pais_")
+     codigo_postal = request.GET.get("codigo_postal_")
+     poblacion = request.GET.get("poblacion_")
+     provincia = request.GET.get("provincia_")
+     
+
+     
+     release_price = float(1.99)
+     total_price = release_price + productos_price
+     
+     modelmap = {"products_price" : productos_price, "precio_envio" : release_price, "precio_total" : total_price }
+    
+     return render(request, 'gamingworld/release.html', modelmap)    

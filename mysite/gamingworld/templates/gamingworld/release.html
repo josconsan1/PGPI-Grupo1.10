@@ -1,0 +1,153 @@
+{% extends "gamingworld/base.html" %}
+
+{% block title %}
+Forma de entrega
+{% endblock %}
+
+{% block body %} 
+{% if products_price > 0 %}
+<hr class="mb-4 mt-0 d-inline-block mx-auto" style="width: 60px; background-color: #7c4dff; height: 2px" />
+<hr class="mb-4 mt-0 d-inline-block mx-auto" style="width: 60px; background-color: #7c4dff; height: 2px" />
+<div class="position-relative m-4" style="margin: 2%;" >
+    <div class="progress" style="height: 1px;">
+      <div class="progress-bar" role="progressbar" aria-label="Progress" style="width: 0%; " aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+    <button type="button" class="position-absolute  top-0 start-0 translate-middle btn btn-sm btn-primary rounded-pill" style="width: 2rem; height:2rem;">1</button>
+    <button type="button" class="position-absolute  top-0 start-50 translate-middle btn btn-sm btn-secondary rounded-pill" style="width: 2rem; height:2rem;">2</button>
+    <button type="button" class="position-absolute  top-0 start-100 translate-middle btn btn-sm btn-secondary rounded-pill" style="width: 2rem; height:2rem;">3</button>
+    <br>
+    <br>
+ </div>
+
+<div class="container text-center">
+    <div class="row">
+        <div class="col-md-12 rosa">
+            
+        
+          <strong>Precio total de la cesta de compra: </strong>
+                    <span>{{products_price}} €<span>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        
+        </div>
+    </div>
+    
+</div>
+
+
+
+<div class="container text-center">
+    <div class="row">
+        <div class="col-md-12 rosa">
+            <hr class="mb-4 mt-0 d-inline-block mx-auto" style="width: 60px; background-color: #7c4dff; height: 2px" />
+            <div class="container text-center">
+                <h4 class="text-start">Datos personales</h4>
+                <div class="row"  style="margin-top: 2%"  >
+                   <div class = col style="padding: 1%;" >
+                    <input  type="text" class="form-control" placeholder="Nombre" aria-label="Nombre" aria-describedby="basic-addon2" id="nombre_"  >
+                   </div>
+                   <div class = col style="padding: 1%;">
+                    <input  type="text" class="form-control" placeholder="Apellidos" aria-label="Apellidos" aria-describedby="basic-addon2" id="apellidos_">
+                   </div>
+                   
+                </div>
+                <div class="row"  style="margin-top: 2%">
+                    <div class = col style="padding: 1%;" >
+                     <input  type="text" class="form-control" placeholder="DNI/CIF/NIF" aria-label="DNI/CIF/NIF" aria-describedby="basic-addon2" id="identificacion_">
+                    </div>
+                    <div class = col style="padding: 1%;" >
+                     <input  type="text" class="form-control" placeholder="Movil" aria-label="Movil" aria-describedby="basic-addon2" id="movil">
+                    </div>
+                    
+                 </div>
+                <h4 class="text-start"  style="margin-top: 3%">Dirección de envio</h4>
+                <div class="row" style="margin-top: 2%">
+                    <div class="col" style="padding: 1%;">
+                        <input style="width:70%;  " type="text" class="form-control" placeholder="Direccion" aria-label="Direccion" aria-describedby="basic-addon2" id="direcccion_"  >
+
+                    </div>
+
+                </div>
+                <div class="row"  style="margin-top: 2%">
+                    <div class="col" style="padding: 1%;">
+                        <input style="width:70%; " type="text" class="form-control" placeholder="Piso, escalera, puerta" aria-label="Piso, escalera, puerta" aria-describedby="basic-addon2" id="piso_"  >
+
+                    </div>
+
+                </div>
+                <div class="row"  style="margin-top: 2%">
+                    <div class="col" style="padding: 1%;">
+                        <input style="width:70%; " type="text" class="form-control" placeholder="Escribe aquí tus observaciones para la agencia de envio" aria-label="Escribe aquí tus observaciones para la agencia de envio" aria-describedby="basic-addon2" id="obsservaciones_" >
+
+                    </div>
+
+                </div>
+                <div class="row"  style="margin-top: 2%"  >
+                    <div class = col style="padding: 1%;" >
+                     <input  type="text" class="form-control" placeholder="País" aria-label="País" aria-describedby="basic-addon2" id="pais_"  >
+                    </div>
+                    <div class = col style="padding: 1%;">
+                     <input  type="text" class="form-control" placeholder="Código postal" aria-label="Código postal" aria-describedby="basic-addon2" id="codigo_postal_">
+                    </div>
+                    
+                 </div>
+                 <div class="row" style="margin-top: 2%">
+                     <div class = col style="padding: 1%;" >
+                      <input   type="text" class="form-control" placeholder="Población"  aria-label="Población" aria-describedby="basic-addon2" id="pobalcion_">
+                     </div>
+                     <div class = col style="padding: 1%;" >
+                      <input   type="text" class="form-control" placeholder="Provincia" aria-label="Provincia" aria-describedby="basic-addon2" id="provincia_">
+                     </div>
+                     
+                  </div>
+
+              </div>
+              
+              <div class="row" >
+                <div>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    
+                        
+                            <small style="font-weight: bold;">Gastos de envio :  </small>
+                        
+                        
+                         <small class="dis-price"
+                            style="color: green; font-weight: bold;">{{precio_envio}}€</small>
+                        
+                    <div class="row">    
+                    </div>
+                    
+                    
+                        <br>
+                        <small  style="font-weight: bold;">Precio total :  </small>
+                    <small class="dis-price"
+                    style="color: green; font-weight: bold;"> {{precio_total}} €<small>
+                        <br>
+                        <br>
+                    <a href="/products/payment/checkout" type="submit" class="btn btn-primary" style="right: right;">Siguiente</a>
+                </div>
+
+              </div>
+             
+           <!-- <h4>Forma de entrega</h4>
+            <p>Si el producto viene defectuoso o no era lo pedido, tendra que llamar al + 34 234 567 88 o enviar un
+                correo a info@gamingworld.com. Una vez se haya puesto en contacto, se le indicará donde debe dejar el
+                producto y como proceder: Podrá realizarse la entrega de un nuevo producto o reembolsar el producto ya
+                comprado.</p>-->
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="row d-flex justify-content-center">
+    <span style="font-size: 200%; font-weight: bold; color: blue; text-align: center;">¡Tu carrito está vacío!</span>
+    <img src="../../../static/imgs/carritoVacio.png" style="width: fit-content;">
+</div>
+{% endif %}
+{% endblock%}

@@ -1,5 +1,6 @@
-from django.urls import path
 from django.contrib import admin
+from django.urls import path
+
 from . import views
 
 urlpatterns = [
@@ -14,6 +15,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('termsofservice/',views.termsofservice, name='termsofservice'),
     path('privacy_policy/', views.privacy_policy),
-    path('checkout/', views.checkout_page, name='checkout'),
-    path('succeed/', views.checkout_suceed, name='succeed')
+    path('products/payment/checkout/', views.checkout_page, name='checkout'),
+    path('products/payment/completed/', views.checkout_suceed, name='succeed'),
+    path('products/payment/release', views.release, name='release'),
 ]
