@@ -193,6 +193,18 @@ def get_cart_price(request):
     return precio_total
 
     
+def get_cart_name(request):
+    productos_amounts = []
+    nombres = ""
+    cookies = request.COOKIES
+    for cookie in cookies.keys():
+        if cookie[0:-1] == "product_id_":
+            producto = Producto.objects.get(id__exact=cookie[-1])
+            nombres += producto.nombre + ", "
+            
+    
+    return nombres
+    
 def release(request):
      productos_price = get_cart_price(request)
      precio_total = get_cart_price(request)
@@ -208,12 +220,22 @@ def release(request):
      codigo_postal = request.GET.get("codigo_postal_")
      poblacion = request.GET.get("poblacion_")
      provincia = request.GET.get("provincia_")
-     
-
-     
+    
      release_price = float(1.99)
      total_price = release_price + productos_price
      
+     productovendido =  Compra()
+     productovendido.productos = get_cart_name(request)
+     productovendido.dir=direccion
+     productovendido.dni=identificacion
+     productovendido.piso=piso
+     productovendido.cp=codigo_postal
+     productovendido.apellidos_dir=apellidos
+     productovendido.nombre_dir=nombre
+     productovendido.precio= total_price
+     if(productovendido.dir != None):
+      productovendido.save()     
+     
      modelmap = {"products_price" : productos_price, "precio_envio" : release_price, "precio_total" : total_price }
     
-     return render(request, 'gamingworld/release.html', modelmap)    
+     return render(request, 'gamingworld/release.html', modelmap)

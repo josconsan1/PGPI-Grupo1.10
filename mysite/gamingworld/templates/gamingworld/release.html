@@ -47,59 +47,59 @@ Forma de entrega
                 <h4 class="text-start">Datos personales</h4>
                 <div class="row"  style="margin-top: 2%"  >
                    <div class = col style="padding: 1%;" >
-                    <input  type="text" class="form-control" placeholder="Nombre" aria-label="Nombre" aria-describedby="basic-addon2" id="nombre_"  >
+                    <input  type="text" class="form-control" placeholder="Nombre" aria-label="Nombre" aria-describedby="basic-addon2" id="nombre_" form="releasedir" name="nombre_" required>
                    </div>
                    <div class = col style="padding: 1%;">
-                    <input  type="text" class="form-control" placeholder="Apellidos" aria-label="Apellidos" aria-describedby="basic-addon2" id="apellidos_">
+                    <input  type="text" class="form-control" placeholder="Apellidos" aria-label="Apellidos" aria-describedby="basic-addon2" id="apellidos_" form="releasedir" name="apellidos_" required>
                    </div>
                    
                 </div>
                 <div class="row"  style="margin-top: 2%">
                     <div class = col style="padding: 1%;" >
-                     <input  type="text" class="form-control" placeholder="DNI/CIF/NIF" aria-label="DNI/CIF/NIF" aria-describedby="basic-addon2" id="identificacion_">
+                     <input  type="text" class="form-control" placeholder="DNI/CIF/NIF" aria-label="DNI/CIF/NIF" aria-describedby="basic-addon2" id="identificacion_" form="releasedir" name="identificacion_" required>
                     </div>
                     <div class = col style="padding: 1%;" >
-                     <input  type="text" class="form-control" placeholder="Movil" aria-label="Movil" aria-describedby="basic-addon2" id="movil">
+                     <input  type="text" class="form-control" placeholder="Movil" aria-label="Movil" aria-describedby="basic-addon2" id="movil_" form="releasedir" name="movil_" required>
                     </div>
                     
                  </div>
                 <h4 class="text-start"  style="margin-top: 3%">Dirección de envio</h4>
                 <div class="row" style="margin-top: 2%">
                     <div class="col" style="padding: 1%;">
-                        <input style="width:70%;  " type="text" class="form-control" placeholder="Direccion" aria-label="Direccion" aria-describedby="basic-addon2" id="direcccion_"  >
+                        <input style="width:70%;  " type="text" class="form-control" placeholder="Direccion" aria-label="Direccion" aria-describedby="basic-addon2" id="direcccion_" form="releasedir" name="direccion_" required>
 
                     </div>
 
                 </div>
                 <div class="row"  style="margin-top: 2%">
                     <div class="col" style="padding: 1%;">
-                        <input style="width:70%; " type="text" class="form-control" placeholder="Piso, escalera, puerta" aria-label="Piso, escalera, puerta" aria-describedby="basic-addon2" id="piso_"  >
+                        <input style="width:70%; " type="text" class="form-control" placeholder="Piso, escalera, puerta" aria-label="Piso, escalera, puerta" aria-describedby="basic-addon2" id="piso_" form="releasedir" name="piso_" required>
 
                     </div>
 
                 </div>
                 <div class="row"  style="margin-top: 2%">
                     <div class="col" style="padding: 1%;">
-                        <input style="width:70%; " type="text" class="form-control" placeholder="Escribe aquí tus observaciones para la agencia de envio" aria-label="Escribe aquí tus observaciones para la agencia de envio" aria-describedby="basic-addon2" id="obsservaciones_" >
+                        <input style="width:70%; " type="text" class="form-control" placeholder="Escribe aquí tus observaciones para la agencia de envio" aria-label="Escribe aquí tus observaciones para la agencia de envio" aria-describedby="basic-addon2" id="observaciones_" form="releasedir" name="observaciones_" required >
 
                     </div>
 
                 </div>
                 <div class="row"  style="margin-top: 2%"  >
                     <div class = col style="padding: 1%;" >
-                     <input  type="text" class="form-control" placeholder="País" aria-label="País" aria-describedby="basic-addon2" id="pais_"  >
+                     <input  type="text" class="form-control" placeholder="País" aria-label="País" aria-describedby="basic-addon2" id="pais_" form="releasedir" name="pais_" required >
                     </div>
                     <div class = col style="padding: 1%;">
-                     <input  type="text" class="form-control" placeholder="Código postal" aria-label="Código postal" aria-describedby="basic-addon2" id="codigo_postal_">
+                     <input  type="text" class="form-control" placeholder="Código postal" aria-label="Código postal" aria-describedby="basic-addon2" id="codigo_postal_" form="releasedir" name="codigo_postal_" required>
                     </div>
                     
                  </div>
                  <div class="row" style="margin-top: 2%">
                      <div class = col style="padding: 1%;" >
-                      <input   type="text" class="form-control" placeholder="Población"  aria-label="Población" aria-describedby="basic-addon2" id="pobalcion_">
+                      <input   type="text" class="form-control" placeholder="Población"  aria-label="Población" aria-describedby="basic-addon2" id="poblacion_" form="releasedir" name="poblacion_" required>
                      </div>
                      <div class = col style="padding: 1%;" >
-                      <input   type="text" class="form-control" placeholder="Provincia" aria-label="Provincia" aria-describedby="basic-addon2" id="provincia_">
+                      <input   type="text" class="form-control" placeholder="Provincia" aria-label="Provincia" aria-describedby="basic-addon2" id="provincia_" form="releasedir" name="provincia_" required>
                      </div>
                      
                   </div>
@@ -131,7 +131,16 @@ Forma de entrega
                     style="color: green; font-weight: bold;"> {{precio_total}} €<small>
                         <br>
                         <br>
-                    <a href="/products/payment/checkout" type="submit" class="btn btn-primary" style="right: right;">Siguiente</a>
+                        
+                        <form action="/products/payment/checkout" method="GET" id="releasedir">
+                            <button href="#" type="submit" class="btn btn-primary" style="right: right;">Siguiente</button>
+                        </form>
+                        <div class="alert alert-primary" role="alert">
+                            Debes completar todos los campos!
+                          </div>
+                      
+                        
+                    
                 </div>
 
               </div>
