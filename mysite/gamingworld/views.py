@@ -1,8 +1,57 @@
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from .models import *
 from datetime import *
 from random import sample
+
+import stripe
+from django.core.mail import send_mail
+from django.http import HttpResponse
+from django.shortcuts import redirect, render
+
+from mysite.settings import STRIPE_KEY
+
+from .models import *
+
+stripe.api_key = STRIPE_KEY
+
+
+
+def checkout_page(request):
+    total_amount = 1.99 # Gastos de envio
+    for p, a in get_products_from_cookies(request):
+        total_amount += float(p.precio) * int(a)
+    intent = stripe.PaymentIntent.create(
+        amount=int(total_amount * 100),
+        currency='eur',
+        automatic_payment_methods={
+            'enabled': True,
+        }
+    )
+    return render(request, 'gamingworld/checkout.html', {'clientSecret': intent['client_secret'], 'total_amount': total_amount})
+
+def checkout_suceed(request):
+    payment_intent = request.GET.get('payment_intent', None)
+    status = 'Algo fue mal durante el pago'
+
+    if payment_intent:
+        paymentIntent = stripe.PaymentIntent.retrieve(payment_intent)
+        if paymentIntent['status'] == 'succeeded':
+            send_mail(
+                'Recibo de pago GamingWorld',
+                'Gracias por comprar en nuestra tienda. Tu identificador de pedido es %s' % (payment_intent),
+                'josconsan1@alum.us.es',
+                [paymentIntent['receipt_email']],
+                fail_silently=True,
+            )
+            status = 'Completado'
+        elif paymentIntent['status'] == 'processing':
+            status = 'Procesando el pago'
+
+    res = render(request, 'gamingworld/succeed.html', {'status': status})
+
+    for cookie in request.COOKIES.keys():
+        if cookie[:-1] == 'product_id_':
+            res.delete_cookie(cookie)
+
+    return res
 
 
 
