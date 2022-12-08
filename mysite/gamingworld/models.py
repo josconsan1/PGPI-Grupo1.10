@@ -27,4 +27,4 @@ class Compra(models.Model):
     piso = models.CharField(max_length=200, null=True)
     dir =models.CharField(max_length=200, null=True)
     precio = models.FloatField(max_length=200, null=True)
-
+    email = models.CharField(max_length=200, null=True) 

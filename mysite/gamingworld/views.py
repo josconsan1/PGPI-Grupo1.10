@@ -208,33 +208,45 @@ def get_cart_name(request):
 def release(request):
      productos_price = get_cart_price(request)
      precio_total = get_cart_price(request)
+     productovendido =  Compra()
 
-     nombre = request.GET.get("nombre_")
-     apellidos = request.GET.get("apellidos_")
-     identificacion = request.GET.get("identificacion_")
-     movil = request.GET.get("movil_")
-     direccion= request.GET.get("direccion_")
-     piso = request.GET.get("piso_")
-     observaciones = request.GET.get("observaciones_")
-     pais = request.GET.get("pais_")
-     codigo_postal = request.GET.get("codigo_postal_")
-     poblacion = request.GET.get("poblacion_")
-     provincia = request.GET.get("provincia_")
+     if request.method == "POST" :
+         nombre = request.POST["nombre_"]
+         apellidos = request.POST["apellidos_"]
+         identificacion = request.POST["identificacion_"]
+         movil = request.POST["movil_"]
+         direccion= request.POST["direccion_"]
+         piso = request.POST["piso_"]
+         observaciones = request.POST["observaciones_"]
+         pais = request.POST["pais_"]
+         codigo_postal = request.POST["codigo_postal_"]
+         poblacion = request.POST["poblacion_"]
+         provincia = request.POST["provincia_"]
+         email = request.POST["email_"]
+         precio_total = get_cart_price(request)
+         
+         productovendido.productos = get_cart_name(request)
+         productovendido.dir=direccion
+         productovendido.dni=identificacion
+         productovendido.piso=piso
+         productovendido.cp=codigo_postal
+         productovendido.apellidos_dir=apellidos
+         productovendido.nombre_dir=nombre
+         productovendido.precio= precio_total
+         productovendido.email= str(email)
+         if(productovendido.dir != None):
+          productovendido.save() 
+         print("GUARDAR_COMRPA")
+         return redirect("/products/payment/checkout/")
     
      release_price = float(1.99)
-     total_price = release_price + productos_price
+     #total_price = release_price + productos_price
+     total_price = productos_price
      
      productovendido =  Compra()
-     productovendido.productos = get_cart_name(request)
-     productovendido.dir=direccion
-     productovendido.dni=identificacion
-     productovendido.piso=piso
-     productovendido.cp=codigo_postal
-     productovendido.apellidos_dir=apellidos
-     productovendido.nombre_dir=nombre
-     productovendido.precio= total_price
-     if(productovendido.dir != None):
-      productovendido.save()     
+     
+     
+     
      
      modelmap = {"products_price" : productos_price, "precio_envio" : release_price, "precio_total" : total_price }
     

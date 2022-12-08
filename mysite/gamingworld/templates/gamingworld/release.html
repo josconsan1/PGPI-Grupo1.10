@@ -38,7 +38,8 @@ Forma de entrega
 </div>
 
 
-
+<form class="form-signin" action="release" method="post" id="releasedir">
+    {% csrf_token %}
 <div class="container text-center">
     <div class="row">
         <div class="col-md-12 rosa">
@@ -59,7 +60,7 @@ Forma de entrega
                      <input  type="text" class="form-control" placeholder="DNI/CIF/NIF" aria-label="DNI/CIF/NIF" aria-describedby="basic-addon2" id="identificacion_" form="releasedir" name="identificacion_" required>
                     </div>
                     <div class = col style="padding: 1%;" >
-                     <input  type="text" class="form-control" placeholder="Movil" aria-label="Movil" aria-describedby="basic-addon2" id="movil_" form="releasedir" name="movil_" required>
+                     <input  type="number" class="form-control" placeholder="Movil" aria-label="Movil" aria-describedby="basic-addon2" id="movil_" form="releasedir" name="movil_" required>
                     </div>
                     
                  </div>
@@ -90,7 +91,7 @@ Forma de entrega
                      <input  type="text" class="form-control" placeholder="País" aria-label="País" aria-describedby="basic-addon2" id="pais_" form="releasedir" name="pais_" required >
                     </div>
                     <div class = col style="padding: 1%;">
-                     <input  type="text" class="form-control" placeholder="Código postal" aria-label="Código postal" aria-describedby="basic-addon2" id="codigo_postal_" form="releasedir" name="codigo_postal_" required>
+                     <input  type="number" class="form-control" placeholder="Código postal" aria-label="Código postal" aria-describedby="basic-addon2" id="codigo_postal_" form="releasedir" name="codigo_postal_" required>
                     </div>
                     
                  </div>
@@ -103,6 +104,13 @@ Forma de entrega
                      </div>
                      
                   </div>
+                  <div class="row"  style="margin-top: 2%">
+                    <div class="col" style="padding: 1%;">
+                        <input style="width:70%; " type="email" class="form-control" placeholder="Introduzca su correo electrónico" aria-label="Introduzca su correo electrónico" aria-describedby="basic-addon2" id="email_" form="releasedir" name="email_" required >
+
+                    </div>
+
+                </div>
 
               </div>
               
@@ -115,12 +123,7 @@ Forma de entrega
                     <br>
                     
                         
-                            <small style="font-weight: bold;">Gastos de envio :  </small>
-                        
-                        
-                         <small class="dis-price"
-                            style="color: green; font-weight: bold;">{{precio_envio}}€</small>
-                        
+                          
                     <div class="row">    
                     </div>
                     
@@ -132,9 +135,10 @@ Forma de entrega
                         <br>
                         <br>
                         
-                        <form action="/products/payment/checkout" method="GET" id="releasedir">
-                            <button href="#" type="submit" class="btn btn-primary" style="right: right;">Siguiente</button>
-                        </form>
+                        
+                            <button href="/products/payment/checkout" type="submit" class="btn btn-primary" style="right: right;">Siguiente</button>
+</form>
+
                         <div class="alert alert-primary" role="alert">
                             Debes completar todos los campos!
                           </div>
@@ -144,6 +148,7 @@ Forma de entrega
                 </div>
 
               </div>
+             
              
            <!-- <h4>Forma de entrega</h4>
             <p>Si el producto viene defectuoso o no era lo pedido, tendra que llamar al + 34 234 567 88 o enviar un
