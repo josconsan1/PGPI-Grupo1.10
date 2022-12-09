@@ -204,6 +204,18 @@ def get_cart_name(request):
             
     
     return nombres
+def add_product_to_compra(request):    
+    lista = []
+    
+    cookies = request.COOKIES
+    for cookie in cookies.keys():
+        i = 0
+        if cookie[0:-1] == "product_id_":
+            producto = Producto.objects.get(id__exact=cookie[-1])
+           # while i < int(cookies[cookie]) :            
+            lista.append(producto)
+          #   i+=1
+    return lista        
     
 def release(request):
      productos_price = get_cart_price(request)
@@ -225,7 +237,8 @@ def release(request):
          email = request.POST["email_"]
          precio_total = get_cart_price(request)
          
-         productovendido.productos = get_cart_name(request)
+         
+         
          productovendido.dir=direccion
          productovendido.dni=identificacion
          productovendido.piso=piso
@@ -236,7 +249,11 @@ def release(request):
          productovendido.email= str(email)
          if(productovendido.dir != None):
           productovendido.save() 
-         print("GUARDAR_COMRPA")
+         productos = add_product_to_compra(request)
+         for producto in productos :
+            productovendido.productos.add(producto)
+        
+         
          return redirect("/products/payment/checkout/")
     
      release_price = float(1.99)

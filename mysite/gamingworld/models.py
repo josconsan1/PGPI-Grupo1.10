@@ -19,7 +19,7 @@ class Producto(models.Model):
 
 
 class Compra(models.Model):
-    productos = models.CharField(max_length=400,null=True)
+    productos = models.ManyToManyField(Producto)
     nombre_dir =  models.CharField(max_length=200,null=True)
     apellidos_dir = models.CharField(max_length=200,null=True)
     dni = models.CharField(max_length=200, null=True)
@@ -28,3 +28,4 @@ class Compra(models.Model):
     dir =models.CharField(max_length=200, null=True)
     precio = models.FloatField(max_length=200, null=True)
     email = models.CharField(max_length=200, null=True) 
+    
