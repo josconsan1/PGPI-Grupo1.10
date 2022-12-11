@@ -1,0 +1,98 @@
+{% extends "gamingworld/base.html" %}
+
+{% block body %}
+
+<br>
+<form action="/purchases/" method="GET">
+    <div class="row">
+        <div class="col-md-8">
+            <input type="email" class="form-control" id="email" name="email"
+                placeholder="Introduzca su correo electrónico..." required>
+            <input type="text" class="form-control" id="dni" name="dni"
+                placeholder="Introduzca su DNI..." required>
+        </div>
+        <div class="col-md-4">
+            <button type="submit" class="btn btn-primary">Buscar</button>
+        </div>
+    </div>
+</form>
+<hr style="border-top: 10px solid #8c8b8b;" />
+{% if compras is none %}
+<span class="h2">Introduzca su correo electrónico para ver sus compras asociadas</span>
+{% else %}
+    {% if compras|length == 0 %}
+    <span class="h2">No se han encontrado compras asociadas a esta dirección de correo</span>
+    {% endif %}
+{% endif %}
+{% for compra in compras %}
+<div class="row">
+    <div class="col-md-7">
+        {% for producto in compra.productos.all %}
+        <div class="row">
+            <div class="col-md-6">
+                <div class="images p-3">
+                    <div class="text-center p-5"> <img src="{{producto.imagen}}" width="50%" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="product p-4">
+                    <div class="mt-4 mb-3">
+                        <strong>Cantidad: </strong>
+                        {% for compraproducto in comprasproductos %}
+                            {% if compraproducto.compra == compra and compraproducto.producto == producto %}
+                                <span>{{compraproducto.cantidad}} </span>
+                            {% endif %}
+                        {% endfor %}
+                        <h5 class="text-uppercase">{{producto.nombre}}</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <span class="border"></span>
+        <hr style="border-top: 1px dashed #8c8b8b;" />
+        {% endfor %}
+    </div>
+    <div class="col-md-1 d-flex">
+        <div class="vr"></div>
+    </div>
+    <div class="col-md-4 align-self-center" style="font-size: x-large;">
+        <div class="row">
+            <div class="col">
+                {% if compra.dir is not none %}
+                <div>
+                    <strong>Direccion: </strong>
+                    <span>{{compra.dir}}</span>
+                </div>
+                {% endif %}
+                {% if compra.piso is not none %}
+                <div>
+                    <strong>Piso: </strong>
+                    <span>{{compra.piso}}</span>
+                </div>
+                {% endif %}
+                {% if compra.cp is not none %}
+                <div>
+                    <strong>Codigo postal: </strong>
+                    <span>{{compra.cp}}</span>
+                </div>
+                {% endif %}
+                {% if compra.precio is not none %}
+                <div style="color: green;">
+                    <strong>Precio: {{compra.precio}}€</strong>
+                </div>
+                {% endif %}
+                {% if not compra.paid %}
+                {{purchase_id}}
+                    <a href="/products/payment/checkout/{{compra.id}}" class="btn btn-success" style="margin-top: 10%;">Proceder al pago</a>
+                {% endif %}
+                <a href="/purchases/delete/{{compra.id}}?email={{request.GET.email}}&dni={{request.GET.dni}}" class="btn btn-danger" style="margin-top: 10%;">Eliminar compra</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+<hr style="border-top: 10px solid #8c8b8b;" />
+{% endfor %}
+
+{% endblock %}

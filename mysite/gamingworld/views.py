@@ -13,48 +13,6 @@ from .models import *
 stripe.api_key = STRIPE_KEY
 
 
-
-def checkout_page(request):
-    total_amount = 1.99 # Gastos de envio
-    for p, a in get_products_from_cookies(request):
-        total_amount += float(p.precio) * int(a)
-    intent = stripe.PaymentIntent.create(
-        amount=int(total_amount * 100),
-        currency='eur',
-        automatic_payment_methods={
-            'enabled': True,
-        }
-    )
-    return render(request, 'gamingworld/checkout.html', {'clientSecret': intent['client_secret'], 'total_amount': total_amount})
-
-def checkout_suceed(request):
-    payment_intent = request.GET.get('payment_intent', None)
-    status = 'Algo fue mal durante el pago'
-
-    if payment_intent:
-        paymentIntent = stripe.PaymentIntent.retrieve(payment_intent)
-        if paymentIntent['status'] == 'succeeded':
-            send_mail(
-                'Recibo de pago GamingWorld',
-                'Gracias por comprar en nuestra tienda. Tu identificador de pedido es %s' % (payment_intent),
-                'josconsan1@alum.us.es',
-                [paymentIntent['receipt_email']],
-                fail_silently=True,
-            )
-            status = 'Completado'
-        elif paymentIntent['status'] == 'processing':
-            status = 'Procesando el pago'
-
-    res = render(request, 'gamingworld/succeed.html', {'status': status})
-
-    for cookie in request.COOKIES.keys():
-        if cookie[:-1] == 'product_id_':
-            res.delete_cookie(cookie)
-
-    return res
-
-
-
 def index(request):
     return render(request, 'gamingworld/index.html', {"slider": enumerate(sample(list(Producto.objects.all()), 3))})
 
@@ -131,8 +89,7 @@ def get_products_from_cookies(request):
     for cookie in cookies.keys():
         if cookie[0:-1] == "product_id_":
             producto = Producto.objects.get(id__exact=cookie[-1])
-            productos_amounts.append(tuple((producto, cookies[cookie])))
-    print(productos_amounts)
+            productos_amounts.append(tuple((producto, int(cookies[cookie]))))
     return productos_amounts
 
 
@@ -202,69 +159,114 @@ def get_cart_name(request):
             producto = Producto.objects.get(id__exact=cookie[-1])
             nombres += producto.nombre + ", "
             
-    
     return nombres
-def add_product_to_compra(request):    
-    lista = []
-    
-    cookies = request.COOKIES
-    for cookie in cookies.keys():
-        i = 0
-        if cookie[0:-1] == "product_id_":
-            producto = Producto.objects.get(id__exact=cookie[-1])
-           # while i < int(cookies[cookie]) :            
-            lista.append(producto)
-          #   i+=1
-    return lista        
+
+def get_products_quantities_from_purchase(purchase_id):
+    cp_list = ComprasProductos.objects.filter(compra = Compra.objects.get(id__exact = purchase_id))
+    res = []
+    for cp in cp_list:
+        res.append(tuple([cp.producto, cp.cantidad]))
+    return res
     
 def release(request):
-     productos_price = get_cart_price(request)
-     precio_total = get_cart_price(request)
-     productovendido =  Compra()
+    precio_carrito = get_cart_price(request)
 
-     if request.method == "POST" :
-         nombre = request.POST["nombre_"]
-         apellidos = request.POST["apellidos_"]
-         identificacion = request.POST["identificacion_"]
-         movil = request.POST["movil_"]
-         direccion= request.POST["direccion_"]
-         piso = request.POST["piso_"]
-         observaciones = request.POST["observaciones_"]
-         pais = request.POST["pais_"]
-         codigo_postal = request.POST["codigo_postal_"]
-         poblacion = request.POST["poblacion_"]
-         provincia = request.POST["provincia_"]
-         email = request.POST["email_"]
-         precio_total = get_cart_price(request)
+    if request.method == "POST":
+        nombre = request.POST["nombre_"]
+        apellidos = request.POST["apellidos_"]
+        identificacion = request.POST["identificacion_"]
+        direccion= request.POST["direccion_"]
+        piso = request.POST["piso_"]
+        codigo_postal = request.POST["codigo_postal_"]
+        email = request.POST["email_"]
          
-         
-         
-         productovendido.dir=direccion
-         productovendido.dni=identificacion
-         productovendido.piso=piso
-         productovendido.cp=codigo_postal
-         productovendido.apellidos_dir=apellidos
-         productovendido.nombre_dir=nombre
-         productovendido.precio= precio_total
-         productovendido.email= str(email)
-         if(productovendido.dir != None):
-          productovendido.save() 
-         productos = add_product_to_compra(request)
-         for producto in productos :
-            productovendido.productos.add(producto)
-        
-         
-         return redirect("/products/payment/checkout/")
+        compra = Compra(nombre_dir=nombre, apellidos_dir = apellidos, dni = identificacion, cp = codigo_postal, piso = piso, dir = direccion, precio = precio_carrito, email = str(email))
+        compra.save()
+        productos_cantidades = get_products_from_cookies(request)
+        for producto_cantidad in productos_cantidades:
+            producto = producto_cantidad[0]
+            cantidad = producto_cantidad[1]
+            if cantidad > producto.stock:
+                return render(request, 'gamingworld/cart.html', {"error_message": "En tu carrito hay más unidades de {} que su stock".format(producto.nombre)})
+            else:
+                producto.stock = producto.stock - cantidad
+                producto.save()
+            cp = ComprasProductos(compra = compra, producto = producto_cantidad[0], cantidad = producto_cantidad[1])
+            cp.save()
+            res = redirect("/products/payment/checkout/"+str(compra.id))
+            for cookie in request.COOKIES.keys():
+                if cookie[:-1] == 'product_id_':
+                    res.delete_cookie(cookie)
+        return res
+    modelmap = {"products_price" : precio_carrito, "precio_envio" : 1.99, "precio_total" : precio_carrito + 1.99}
     
-     release_price = float(1.99)
-     #total_price = release_price + productos_price
-     total_price = productos_price
-     
-     productovendido =  Compra()
-     
-     
-     
-     
-     modelmap = {"products_price" : productos_price, "precio_envio" : release_price, "precio_total" : total_price }
+    return render(request, 'gamingworld/release.html', modelmap)
+
+def checkout_page(request, purchase_id):
+    if Compra.objects.get(id__exact = purchase_id).paid:
+        return render(request, 'gamingworld/index.html', {"error_message":"Esta compra ya ha finalizado"})
+    total_amount = 1.99 # Gastos de envio
+    for p, a in get_products_quantities_from_purchase(purchase_id):
+        total_amount += float(p.precio) * int(a)
+    intent = stripe.PaymentIntent.create(
+        amount=int(total_amount * 100),
+        currency='eur',
+        automatic_payment_methods={
+            'enabled': True,
+        }
+    )
+    return render(request, 'gamingworld/checkout.html', {'clientSecret': intent['client_secret'], 'total_amount': total_amount, 'purchase_id':purchase_id})
+
+def checkout_suceed(request, purchase_id):
+    if Compra.objects.get(id__exact = purchase_id).paid:
+        return render(request, 'gamingworld/index.html', {"error_message":"Esta compra ya ha finalizado"})
+    payment_intent = request.GET.get('payment_intent', None)
+    status = 'Algo fue mal durante el pago'
+
+    if payment_intent:
+        paymentIntent = stripe.PaymentIntent.retrieve(payment_intent)
+        if paymentIntent['status'] == 'succeeded':
+            send_mail(
+                'Recibo de pago GamingWorld',
+                'Gracias por comprar en nuestra tienda. Tu identificador de pedido es %s' % (payment_intent),
+                'josconsan1@alum.us.es',
+                [paymentIntent['receipt_email']],
+                fail_silently=True,
+            )
+            status = 'Completado'
+            compra = Compra.objects.get(id__exact = purchase_id)
+            compra.paid = True
+            compra.save()
+        elif paymentIntent['status'] == 'processing':
+            status = 'Procesando el pago'
+
+    res = render(request, 'gamingworld/succeed.html', {'status': status})
+
+    return res
+
     
-     return render(request, 'gamingworld/release.html', modelmap)
+def purchases(request):
+    requested_email = request.GET.get("email")
+    requested_dni = request.GET.get("dni")
+    compras = None
+    comprasproductos = []
+    if requested_email is not None and requested_dni is not None:
+        compras = Compra.objects.filter(email = requested_email, dni = requested_dni)
+        for compra in compras:
+            compraproducto = ComprasProductos.objects.filter(compra = compra)
+            comprasproductos.extend(compraproducto)
+    modelmap = {'compras': compras, 'comprasproductos':comprasproductos}
+    return render(request, 'gamingworld/purchases.html', modelmap)
+
+def purchases_delete(request, purchase_id):
+    requested_email = request.GET.get("email")
+    requested_dni = request.GET.get("dni")
+    purchase = Compra.objects.get(id__exact = purchase_id)
+    if purchase.dni == requested_dni and purchase.email == requested_email:
+        if not purchase.paid:
+            for compraproducto in ComprasProductos.objects.filter(compra = purchase):
+                producto = Producto.objects.get(id__exact = compraproducto.producto.id)
+                producto.stock = producto.stock + compraproducto.cantidad
+                producto.save()
+        purchase.delete()
+    return purchases(request)
