@@ -10,6 +10,9 @@ from mysite.settings import STRIPE_KEY
 
 from .models import *
 
+import random
+import string
+
 stripe.api_key = STRIPE_KEY
 
 
@@ -167,6 +170,11 @@ def get_products_quantities_from_purchase(purchase_id):
     for cp in cp_list:
         res.append(tuple([cp.producto, cp.cantidad]))
     return res
+
+def get_random_string(length):
+    letters = string.ascii_lowercase
+    result_str = ''.join(random.choice(letters) for i in range(length))
+    return result_str
     
 def release(request):
     precio_carrito = get_cart_price(request)
@@ -179,8 +187,12 @@ def release(request):
         piso = request.POST["piso_"]
         codigo_postal = request.POST["codigo_postal_"]
         email = request.POST["email_"]
+        contrarrembolso = request.POST.get('cbox1')
          
-        compra = Compra(nombre_dir=nombre, apellidos_dir = apellidos, dni = identificacion, cp = codigo_postal, piso = piso, dir = direccion, precio = precio_carrito, email = str(email))
+        ord_id = str(random.randint(0,1000000))
+        while(Compra.objects.all().filter(order_id = ord_id).count() != 0):
+            ord_id = str(random.randint(0,1000000))
+        compra = Compra(nombre_dir=nombre, apellidos_dir = apellidos, dni = identificacion, cp = codigo_postal, piso = piso, dir = direccion, precio = precio_carrito, email = str(email), order_id = ord_id)
         compra.save()
         productos_cantidades = get_products_from_cookies(request)
         for producto_cantidad in productos_cantidades:
@@ -188,6 +200,28 @@ def release(request):
             cantidad = producto_cantidad[1]
             if cantidad > producto.stock:
                 return render(request, 'gamingworld/cart.html', {"error_message": "En tu carrito hay más unidades de {} que su stock".format(producto.nombre)})
+            elif contrarrembolso == 'cbox1':
+                purchase_id = str(compra.id)
+                total_amount = precio_carrito + 1.99
+                intent = str('c' + str(random.randint(10000000, 99999999)) + get_random_string(10))
+                while(Compra.objects.all().filter(order_id = intent).count() != 0):
+                    intent = str('c' + str(random.randint(10000000, 99999999)) + get_random_string(10))
+                producto.stock = producto.stock - cantidad
+                producto.save()
+                cp = ComprasProductos(compra = compra, producto = producto_cantidad[0], cantidad = producto_cantidad[1])
+                cp.save()
+                compra.order_id = str(intent)
+                compra.status = EstadoPedido.objects.order_by('?')[0]
+                compra.save()
+                status = 'Completado'
+                send_mail(
+                'Recibo de pago GamingWorld',
+                'Gracias por comprar en nuestra tienda. Tu identificador de pedido es %s' % (intent),
+                'josconsan1@alum.us.es',
+                [email],
+                fail_silently=True,
+            )
+                return render(request, 'gamingworld/succeed.html', {'status': status, 'total_amount': total_amount, 'purchase_id':purchase_id})
             else:
                 producto.stock = producto.stock - cantidad
                 producto.save()
@@ -205,7 +239,7 @@ def release(request):
 def checkout_page(request, purchase_id):
     if Compra.objects.get(id__exact = purchase_id).paid:
         return render(request, 'gamingworld/index.html', {"error_message":"Esta compra ya ha finalizado"})
-    total_amount = 1.99 # Gastos de envio
+    total_amount = 0
     for p, a in get_products_quantities_from_purchase(purchase_id):
         total_amount += float(p.precio) * int(a)
     intent = stripe.PaymentIntent.create(

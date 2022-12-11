@@ -32,7 +32,7 @@ class Compra(models.Model):
     email = models.CharField(max_length=200, null=True)
     paid = models.BooleanField(default=False) 
     status = models.ForeignKey(EstadoPedido, on_delete=models.CASCADE, null=True)
-    order_id = models.CharField(max_length=200, unique=True)
+    order_id = models.CharField(max_length=200, unique=True, null=True)
     
 class ComprasProductos(models.Model):
     compra = models.ForeignKey(Compra, on_delete=models.CASCADE)
