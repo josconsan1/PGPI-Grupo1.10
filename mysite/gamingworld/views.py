@@ -236,6 +236,8 @@ def checkout_suceed(request, purchase_id):
             status = 'Completado'
             compra = Compra.objects.get(id__exact = purchase_id)
             compra.paid = True
+            compra.order_id = payment_intent
+            compra.status = EstadoPedido.objects.order_by('?')[0]
             compra.save()
         elif paymentIntent['status'] == 'processing':
             status = 'Procesando el pago'
@@ -270,3 +272,26 @@ def purchases_delete(request, purchase_id):
                 producto.save()
         purchase.delete()
     return purchases(request)
+
+def get_order_by_id(request):
+    res = None
+    order_id_buscado = request.GET.get('order_id')
+    orders = Compra.objects.all()
+    for order in orders:
+        pedido_id = order.order_id
+        if pedido_id==str(order_id_buscado):
+            res = order
+    if res==None:
+        return render(request, 'gamingworld/order_not_found.html')
+    else:
+        modelmap = {'productos':res.productos, 
+                        'status':res.status.nombre,
+                        'direccion':res.dir,
+                        'nombre':res.nombre_dir,
+                        'apellido':res.apellidos_dir,
+                        'correo':res.email,
+                        'order_id':res.order_id}
+        return render(request, 'gamingworld/follow_order.html', modelmap)
+
+def order_not_found(request):
+    return render(request, 'gamingworld/order_not_found.html')

@@ -20,4 +20,6 @@ urlpatterns = [
     path('products/payment/checkout/<int:purchase_id>/', views.checkout_page, name='checkout'),
     path('products/payment/completed/<int:purchase_id>/', views.checkout_suceed, name='succeed'),
     path('products/payment/release', views.release, name='release'),
+    path('orders/', views.get_order_by_id),
+    path('order_not_found/', views.order_not_found),
 ]

@@ -17,6 +17,8 @@ class Producto(models.Model):
     stock = models.PositiveIntegerField(default=0)
     imagen = models.CharField(max_length=200)
 
+class EstadoPedido(models.Model):
+    nombre = models.CharField(max_length=200)
 
 class Compra(models.Model):
     productos = models.ManyToManyField(Producto, through='ComprasProductos')
@@ -29,6 +31,8 @@ class Compra(models.Model):
     precio = models.FloatField(max_length=200, null=True)
     email = models.CharField(max_length=200, null=True)
     paid = models.BooleanField(default=False) 
+    status = models.ForeignKey(EstadoPedido, on_delete=models.CASCADE, null=True)
+    order_id = models.CharField(max_length=200, unique=True)
     
 class ComprasProductos(models.Model):
     compra = models.ForeignKey(Compra, on_delete=models.CASCADE)
