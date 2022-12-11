@@ -19,7 +19,7 @@ class Producto(models.Model):
 
 
 class Compra(models.Model):
-    productos = models.ManyToManyField(Producto)
+    productos = models.ManyToManyField(Producto, through='ComprasProductos')
     nombre_dir =  models.CharField(max_length=200,null=True)
     apellidos_dir = models.CharField(max_length=200,null=True)
     dni = models.CharField(max_length=200, null=True)
@@ -27,5 +27,10 @@ class Compra(models.Model):
     piso = models.CharField(max_length=200, null=True)
     dir =models.CharField(max_length=200, null=True)
     precio = models.FloatField(max_length=200, null=True)
-    email = models.CharField(max_length=200, null=True) 
+    email = models.CharField(max_length=200, null=True)
+    paid = models.BooleanField(default=False) 
     
+class ComprasProductos(models.Model):
+    compra = models.ForeignKey(Compra, on_delete=models.CASCADE)
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    cantidad = models.PositiveIntegerField(default=1)
